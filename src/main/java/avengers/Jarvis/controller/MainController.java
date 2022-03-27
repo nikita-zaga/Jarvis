@@ -3,6 +3,7 @@ package avengers.Jarvis.controller;
 import avengers.Jarvis.domain.User;
 import avengers.Jarvis.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,9 @@ public class MainController {
 
     private final MessageRepository messageRepository;
 
+    @Value("${spring.profile.active}")
+    private String profile;
+
     @Autowired
     public MainController(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
@@ -30,6 +34,7 @@ public class MainController {
         data.put("profile", user);
         data.put("messages", messageRepository.findAll());
         model.addAttribute("frontendData", data);
+        model.addAttribute("isDevMode","dev".equals(profile));
 
         return "index";
     }
